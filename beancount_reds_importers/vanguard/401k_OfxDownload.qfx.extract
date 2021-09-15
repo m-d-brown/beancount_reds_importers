@@ -1,0 +1,21 @@
+
+2021-08-15 * "Price as of date based on closing price" "[VFIFX] Vanguard Target Retirement 2050 Fund"
+  settlement_date: "2021-08-16"
+  Assets:Vanguard:401k:VFIFX     1.23 VFIFX {116.26 USD}
+  Assets:Vanguard:401k:USD    -143.00 USD               
+
+2021-08-22 * "Investment Expense" "[VFIFX] Vanguard Target Retirement 2050 Fund"
+  Assets:Vanguard:401k:VFIFX                       -0.0456 VFIFX
+  Assets:Zero-Sum-Accounts:Transfers:Bank-Account   0.0456 VFIFX
+
+2021-08-22 * "Investment Expense" "[VFIFX] Vanguard Target Retirement 2050 Fund"
+  Assets:Vanguard:401k:VFIFX                       -0.042 VFIFX
+  Assets:Zero-Sum-Accounts:Transfers:Bank-Account   0.042 VFIFX
+
+2021-08-29 * "Investment Expense" "[VFIFX] Vanguard Target Retirement 2050 Fund"
+  Assets:Vanguard:401k:VFIFX                       -0.0099 VFIFX
+  Assets:Zero-Sum-Accounts:Transfers:Bank-Account   0.0099 VFIFX
+
+2021-08-30 balance Assets:Vanguard:401k:VFIFX                      123456.78 VFIFX
+
+2021-09-10 price VFIFX                              129.25 USD
