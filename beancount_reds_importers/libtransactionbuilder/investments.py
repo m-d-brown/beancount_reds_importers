@@ -112,6 +112,13 @@ class Importer(importer.ImporterProtocol):
         else:
             return account
 
+    def narrate(self, ot, ticker, ticker_long_name):
+        parts = [ot.type.upper(), ticker, ticker_long_name]
+        if hasattr(ot, 'inv401ksource'):
+            parts.append(f'401(k) {ot.inv401ksource}')
+        parts.append(ot.memo)
+        return ' - '.join(p for p in parts if p)
+
     # extract() and supporting methods
     # --------------------------------------------------------------------------------
 
@@ -129,7 +136,6 @@ class Importer(importer.ImporterProtocol):
         if getattr(ot, 'settleDate', None) is not None and ot.settleDate != ot.tradeDate:
             metadata['settlement_date'] = str(ot.settleDate.date())
 
-        description = f'[{ticker}] {ticker_long_name}'
         target_acct = self.get_target_acct(ot)
         units = ot.units
         total = ot.total
@@ -146,7 +152,9 @@ class Importer(importer.ImporterProtocol):
 
         # Build transaction entry
         entry = data.Transaction(metadata, ot.tradeDate.date(), self.FLAG,
-                                 ot.memo, description, data.EMPTY_SET, data.EMPTY_SET, [])
+                                 None,
+                                 self.narrate(ot, ticker, ticker_long_name),
+                                 data.EMPTY_SET, data.EMPTY_SET, [])
 
         # Main posting(s):
         main_acct = self.commodity_leaf(config['main_account'], ticker)
@@ -205,16 +213,17 @@ class Importer(importer.ImporterProtocol):
         if ot.type in ['income', 'dividends', 'capgains_lt',
                        'capgains_st', 'transfer'] and (hasattr(ot, 'security') and ot.security):
             ticker, ticker_long_name = self.get_ticker_info(ot.security)
-            description = f'[{ticker}] {ticker_long_name}'
+            narration = self.narrate(ot, ticker, ticker_long_name)
             if ot.type in ['income', 'dividends', 'capgains_st', 'capgains_lt']:  # no need to do this for transfers
                 target_acct = self.commodity_leaf(target_acct, ticker)  # book to Income:Dividends:HOOLI
         else:  # cash transfer
-            description = ot.type
+            narration = self.narrate(ot, '', '')
             ticker = self.currency
 
         # Build transaction entry
         entry = data.Transaction(metadata, date, self.FLAG,
-                                 ot.memo, description, data.EMPTY_SET, data.EMPTY_SET, [])
+                                 None, narration,
+                                 data.EMPTY_SET, data.EMPTY_SET, [])
 
         # Build postings
         if ot.type in ['income', 'dividends', 'capgains_st', 'capgains_lt']:  # cash
