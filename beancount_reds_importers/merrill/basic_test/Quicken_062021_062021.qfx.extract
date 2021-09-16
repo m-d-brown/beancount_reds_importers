@@ -1,13 +1,13 @@
 
-2021-06-30 * "Dividend: VANGUARD 500 INDEX FUND ADMIRAL CL PAY DATE 06/29/2021" "[VFIAX] Vanguard 500 Index Fund Admiral Shares"
+2021-06-30 * "INCOME - VFIAX - Vanguard 500 Index Fund Admiral Shares - Dividend: VANGUARD 500 INDEX FUND ADMIRAL CL PAY DATE 06/29/2021"
   Assets:MerrillEdge:USD               123.23 USD
   Income:Dividends:MerrillEdge:VFIAX  -123.23 USD
 
-2021-06-30 * "Reinvestment Share(s): VANGUARD 500 INDEX FUND ADMIRAL CL AGENT" "[VFIAX] Vanguard 500 Index Fund Admiral Shares"
+2021-06-30 * "TRANSFER - VFIAX - Vanguard 500 Index Fund Admiral Shares - Reinvestment Share(s): VANGUARD 500 INDEX FUND ADMIRAL CL AGENT"
   Assets:MerrillEdge:VFIAX                          0.456 VFIAX
   Assets:Zero-Sum-Accounts:Transfers:Bank-Account  -0.456 VFIAX
 
-2021-06-30 * "VANGUARD 500 INDEX FUND ADMIRAL CL" "debit"
+2021-06-30 * "DEBIT - VANGUARD 500 INDEX FUND ADMIRAL CL"
   Assets:MerrillEdge:USD                           -123.23 USD
   Assets:Zero-Sum-Accounts:Transfers:Bank-Account   123.23 USD
 
