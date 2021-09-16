@@ -220,6 +220,17 @@ class Importer(importer.ImporterProtocol):
         if ot.type in ['income', 'dividends', 'capgains_st', 'capgains_lt']:  # cash
             data.create_simple_posting(entry, self.cash_account, ot.total, self.currency)
             data.create_simple_posting(entry, target_acct, -1 * ot.total, self.currency)
+        # Transfer in or out, as cash, rather than in-kind.
+        elif ot.type == 'transfer' and ot.units != 0:
+            main_acct = self.commodity_leaf(config['main_account'], ticker)
+            common.create_simple_posting_with_price(entry, main_acct,
+                                                    units, ticker, ot.unit_price,
+                                                    self.currency)
+            # There isn't information about the target account.Rrather than
+            # doing
+            #   data.create_simple_posting(entry, 'account', -1 * units * ot.unit_price, self.currency)
+            # let the other half of the transaction be empty so that the user's
+            # matching or manual edit can add the account.
         else:
             main_acct = self.commodity_leaf(config['main_account'], ticker)
             data.create_simple_posting(entry, main_acct, units, ticker)
