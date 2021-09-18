@@ -14,7 +14,7 @@ from beancount_reds_importers.libtransactionbuilder import common
 class Importer(importer.ImporterProtocol):
     def __init__(self, config):
         self.config = config
-        self.initialized = False
+        self.initialized_file_name = None
         self.initialized_reader = False
         self.reader_ready = False
         self.custom_init_run = False
@@ -35,7 +35,10 @@ class Importer(importer.ImporterProtocol):
         # }
 
     def initialize(self, file):
-        if not self.initialized:
+        if self.initialized_file_name:
+            if file.name != self.initialized_file_name:
+                raise Exception(f'Importer got file {file.name} but already initialized with {self.initialized_file_name}')
+        else:
             self.custom_init()
             self.initialize_reader(file)
             if self.reader_ready:
@@ -45,7 +48,7 @@ class Importer(importer.ImporterProtocol):
                 self.funds_by_ticker = {ticker: (ticker, desc) for ticker, _, desc in self.fund_data}
                 self.funds_db = getattr(self, getattr(self, 'funds_db_txt', 'funds_by_id'))
                 self.build_account_map()  # TODO: avoid for identify()
-            self.initialized = True
+            self.initialized_file_name = file.name
 
     def build_account_map(self):
         # map transaction types to target posting accounts
@@ -236,6 +239,7 @@ class Importer(importer.ImporterProtocol):
         # 'units': Decimal('2345.67'),
         # 'unit_price': Decimal('1.0'),
         # 'total': Decimal('-2345.67')
+        # 'id': '1234567890'
 
         # Optional transaction fields:
         # 'settleDate': datetime.datetime(2018, 6, 25, 19, 0),
@@ -244,7 +248,14 @@ class Importer(importer.ImporterProtocol):
 
         new_entries = []
         self.read_file(file)
+        seen_ids = {}
         for ot in self.get_transactions():
+            # Vanguard 401(k) has multiple identical transactions with the
+            # same fitid.
+            if ot.id in seen_ids:
+                continue
+            seen_ids[ot.id] = True
+
             if ot.type in ['buymf', 'sellmf', 'buystock', 'sellstock', 'buyother', 'sellother', 'reinvest']:
                 entry = self.generate_trade_entry(ot, file, counter)
             elif ot.type in ['other', 'credit', 'debit', 'transfer', 'dep', 'income',

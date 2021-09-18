@@ -12,6 +12,7 @@ from os import path
 from beancount.ingest import regression_pytest
 from beancount_reds_importers import vanguard
 
+# Note this is the same importer instance across all files in this
 IMPORTER = vanguard.Importer({
         'main_account'   : 'Assets:Vanguard:401k',
         'account_number' : '123456',
