@@ -1,7 +1,6 @@
 
 2021-08-22 * "Investment Expense" "[VFIFX] Vanguard Target Retirement 2050 Fund"
-  Assets:Vanguard:401k:VFIFX                       -0.056 VFIFX
-  Assets:Zero-Sum-Accounts:Transfers:Bank-Account   0.056 VFIFX
+  Assets:Vanguard:401k:VFIFX  -0.056 VFIFX {92.94 USD}
 
 2021-08-23 balance Assets:Vanguard:401k:VFIFX                      23456.78 VFIFX
 
