@@ -35,7 +35,14 @@ class Importer(reader.Reader, importer.ImporterProtocol):
 
     def file_date(self, file):
         "Get the maximum date from the file."
-        self.ofx_account.statement.end_date
+        stmt = self.ofx_account.statement
+        if hasattr(stmt, 'end_date'):
+            return stmt.end_date
+        # Some providers, like Merrill Lynch, do not provide an end date if
+        # there are no transactions.
+        if hasattr(stmt, 'positions'):
+            return max(p.date for p in stmt.positions)
+        raise Exception(f'could not find end date in {file.name}')
 
     def read_file(self, file):
         pass
