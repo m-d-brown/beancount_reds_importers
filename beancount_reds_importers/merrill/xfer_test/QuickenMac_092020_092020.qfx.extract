@@ -1,0 +1,13 @@
+
+2021-05-26 * "Merrill Edge Offer $100 Cash +Trial" "other"
+  Assets:MerrillEdge:USD                            600 USD
+  Assets:Zero-Sum-Accounts:Transfers:Bank-Account  -600 USD
+
+2021-06-11 * "TO BAC#00098766789 TEST USER" "xfer"
+  Assets:MerrillEdge:USD                           -100 USD
+  Assets:Zero-Sum-Accounts:Transfers:Bank-Account   100 USD
+
+2021-06-12 balance Assets:MerrillEdge:VFIAX                        1234.321 VFIAX
+2021-06-12 balance Assets:MerrillEdge:USD                          0 USD
+
+2021-09-17 price VFIAX                              410.41 USD
