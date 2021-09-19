@@ -4,6 +4,18 @@ import ntpath
 from beancount_reds_importers.libreader import ofxreader
 from beancount_reds_importers.libtransactionbuilder import investments
 
+# TODO: Fix reinvestment. For example,
+#
+# 2020-06-30 * "Reinvestment Share(s): VANGUARD 500 INDEX FUND ADMIRAL CL AGENT" "[VFIAX] Vanguard 500 Index Fund Admiral Shares"
+#   Assets:BofA:MerrillEdge:VFIAX   1.00 VFIAX
+#   Assets:Transfers:MerrillEdge   -1.00 VFIAX
+#
+# should instead be
+#
+# 2020-06-30 * "Reinvestment Share(s): VANGUARD 500 INDEX FUND ADMIRAL CL AGENT" "[VFIAX] Vanguard 500 Index Fund Admiral Shares"
+#   Assets:BofA:MerrillEdge:VFIAX   1.00 VFIAX {}
+#   Assets:Transfers:MerrillEdge  -327.00 USD
+
 
 class Importer(investments.Importer, ofxreader.Importer):
     def custom_init(self):
