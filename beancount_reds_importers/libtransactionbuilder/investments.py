@@ -68,6 +68,7 @@ class Importer(importer.ImporterProtocol):
             "credit":      self.config['transfer'],
             "debit":       self.config['transfer'],
             "transfer":    self.config['transfer'],
+            "xfer":        self.config['transfer'],
             "cash":        self.config['transfer'],
             "dep":         self.config['transfer'],
         }
@@ -205,7 +206,7 @@ class Importer(importer.ImporterProtocol):
         try:
             if ot.type in ['transfer']:
                 units = ot.units
-            elif ot.type in ['other', 'credit', 'debit', 'dep', 'cash']:
+            elif ot.type in ['other', 'xfer', 'credit', 'debit', 'dep', 'cash']:
                 units = ot.amount
             else:
                 units = ot.total
@@ -279,12 +280,12 @@ class Importer(importer.ImporterProtocol):
 
             if ot.type in ['buymf', 'sellmf', 'buystock', 'sellstock', 'buyother', 'sellother', 'reinvest']:
                 entry = self.generate_trade_entry(ot, file, counter)
-            elif ot.type in ['other', 'credit', 'debit', 'transfer', 'dep', 'income',
+            elif ot.type in ['other', 'credit', 'debit', 'transfer', 'xfer', 'dep', 'income',
                              'dividends', 'capgains_st', 'capgains_lt', 'cash']:
                 entry = self.generate_transfer_entry(ot, file, counter)
             else:
                 print("ERROR: unknown entry type:", ot.type)
-                raise Exception('Unknown entry type')
+                raise Exception(f'Unknown entry type {ot.type}')
             self.add_fee_postings(entry, ot)
             new_entries.append(entry)
         return new_entries
