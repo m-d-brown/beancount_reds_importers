@@ -12,6 +12,9 @@ from beancount_reds_importers.libtransactionbuilder import common
 
 
 class Importer(importer.ImporterProtocol):
+    # This attribute is defined by reader.Reader.
+    ACCOUNT_REPLACEMENT_FIELDS = {'currency', 'ticker'}
+
     def __init__(self, config):
         self.config = config
         self.initialized = False
@@ -63,7 +66,8 @@ class Importer(importer.ImporterProtocol):
             self.initialize_reader(file)
             if self.reader_ready:
                 # TODO: get self.currency to be defined by the reader (ofx, csv, etc.), overridable by config
-                d = {'currency': self.currency, 'ticker': '{ticker}'}
+                d = dict((f, '{'+f+'}') for f in self.ACCOUNT_REPLACEMENT_FIELDS)
+                d['currency'] = self.currency
                 self.config = {k: v.format(**d) if isinstance(v, str) else v for k, v in self.config.items()}
                 self.money_market_funds = self.config['fund_info']['money_market']
                 self.fund_data = self.config['fund_info']['fund_data']  # [(ticker, id, long_name), ...]
